@@ -1,0 +1,92 @@
+.modal_call {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.call_box {
+  width: 100%;
+  max-width: 400px;
+  background-color: #191919;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
+  padding: 50px 0;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #191919;
+}
+
+.call_box h4,
+.call_box h6 {
+  margin-top: 5px;
+}
+
+.call_menu {
+  min-width: 280px;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.call_menu .icon {
+  /* font-size: 2rem; */
+  background: #eee;
+  /* padding: 15px; */
+  border-radius: 50%;
+}
+
+.modal_call .timer {
+  transform: translateY(-15px);
+}
+
+.modal_call .show_video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  pointer-events: none;
+}
+
+.modal_call .you_video {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;
+  border-radius: 5px;
+  border: 1px solid crimson;
+  z-index: 99999;
+}
+
+.modal_call .other_video {
+  width: 100%;
+  height: 100%;
+}
+
+.modal_call .end_call {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: initial;
+  background: #eee;
+  color: crimson;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.modal_call .time_video {
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+}
