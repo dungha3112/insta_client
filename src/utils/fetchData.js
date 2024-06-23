@@ -5,44 +5,57 @@ export const baseURL =
     ? process.env.REACT_APP_API_URL
     : process.env.REACT_APP_DEV_API_URL;
 
-// export const baseURL = "https://insta-server-2cnk.onrender.com";
+export const axiosClients = axios.create({
+  baseURL: baseURL,
+  withCredentials: true,
+});
 
 export const getDataAPI = async (url, token) => {
-  const res = await axios.get(`${baseURL}/api/${url}`, {
-    headers: { Authorization: token },
-    withCredentials: true,
+  const res = await axiosClients.get(`${baseURL}/api/${url}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
   });
   return res;
 };
 
 export const postDataAPI = async (url, post, token) => {
-  const res = await axios.post(`${baseURL}/api/${url}`, post, {
-    headers: { Authorization: token },
-    withCredentials: true,
+  const res = await axiosClients.post(`${baseURL}/api/${url}`, post, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
   });
   return res;
 };
 
 export const putDataAPI = async (url, post, token) => {
-  const res = await axios.put(`${baseURL}/api/${url}`, post, {
-    headers: { Authorization: token },
-    withCredentials: true,
+  const res = await axiosClients.put(`${baseURL}/api/${url}`, post, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
   });
   return res;
 };
 
 export const patchDataAPI = async (url, post, token) => {
-  const res = await axios.patch(`${baseURL}/api/${url}`, post, {
-    headers: { Authorization: token },
-    withCredentials: true,
+  const res = await axiosClients.patch(`${baseURL}/api/${url}`, post, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
   });
   return res;
 };
 
 export const deleteDataAPI = async (url, token) => {
-  const res = await axios.delete(`${baseURL}/api/${url}`, {
-    headers: { Authorization: token },
-    withCredentials: true,
+  const res = await axiosClients.delete(`${baseURL}/api/${url}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
   });
   return res;
 };
