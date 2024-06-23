@@ -68,7 +68,13 @@ const App = () => {
   }, [dispatch, firstLogin]);
 
   useEffect(() => {
-    const newPeer = new Peer(undefined, { host: "/", port: "3001" });
+    const newPeer = new Peer(undefined, {
+      host:
+        process.env.NODE_ENV === "production"
+          ? process.env.REACT_APP_API_URL
+          : process.env.REACT_APP_DEV_API_URL,
+      port: "3001",
+    });
     dispatch({ type: GLOBALTYPES.PEER, payload: newPeer });
   }, [dispatch]);
 
