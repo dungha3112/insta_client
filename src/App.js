@@ -77,7 +77,7 @@ const App = () => {
   return (
     <div className="flex">
       <ToastContainer />
-      <BrowserRouter basename="/subdirectory">
+      <BrowserRouter>
         {access_token && <Sidebar />}
         {access_token && <SocketClient />}
         {call && <CallModal />}
