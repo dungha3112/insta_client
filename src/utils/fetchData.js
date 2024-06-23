@@ -5,6 +5,8 @@ export const baseURL =
     ? process.env.REACT_APP_API_URL
     : process.env.REACT_APP_DEV_API_URL;
 
+// export const baseURL = "https://insta-server-2cnk.onrender.com";
+
 export const getDataAPI = async (url, token) => {
   const res = await axios.get(`${baseURL}/api/${url}`, {
     headers: { Authorization: token },
