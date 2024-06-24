@@ -10,12 +10,12 @@ import { addMessage } from "../../redux/actions/messageAction";
 import RingRing from "../../assets/audio/message_calling.mp3";
 
 const CallModal = () => {
-  const { call, auth, peer, socket } = useSelector((state) => state);
+  const { auth, call, peer, socket } = useSelector((state) => state);
   const dispatch = useDispatch();
 
+  const [hour, setHour] = useState(0);
   const [mins, setMins] = useState(0);
   const [second, setSecond] = useState(0);
-  const [hours, setHours] = useState(0);
   const [total, setTotal] = useState(0);
   const [answer, setAnswer] = useState(false);
   const [tracks, setTracks] = useState(null);
@@ -24,7 +24,7 @@ const CallModal = () => {
   const youVideo = useRef();
   const otherVideo = useRef();
 
-  // set timer
+  // setTimeout
   useEffect(() => {
     const setTime = () => {
       setTotal((t) => t + 1);
@@ -33,13 +33,13 @@ const CallModal = () => {
     setTime();
     return () => setTotal(0);
   }, []);
-
   useEffect(() => {
     setSecond(total % 60);
     setMins(parseInt(total / 60));
-    setHours(parseInt(total / 3600));
+    setHour(parseInt(total / 3600));
   }, [total]);
 
+  // End call
   const addCallMessage = useCallback(
     (call, times, disconnect) => {
       if (call.recipient !== auth.user._id || disconnect) {
@@ -51,7 +51,6 @@ const CallModal = () => {
           call: { video: call.video, times },
           createdAt: new Date().toISOString(),
         };
-
         dispatch(addMessage({ msg, auth, socket }));
       }
     },
@@ -60,14 +59,13 @@ const CallModal = () => {
 
   const handleEndCall = () => {
     tracks && tracks.forEach((track) => track.stop());
+    if (newCall) newCall.close();
     let times = answer ? total : 0;
-
     socket.emit("endCall", { ...call, times });
     addCallMessage(call, times);
 
     dispatch({ type: GLOBALTYPES.CALL, payload: null });
   };
-
   useEffect(() => {
     if (answer) {
       setTotal(0);
@@ -76,29 +74,26 @@ const CallModal = () => {
         socket.emit("endCall", { ...call, times: 0 });
         addCallMessage(call, 0);
         dispatch({ type: GLOBALTYPES.CALL, payload: null });
-      }, 28000);
+      }, 15000);
       return () => clearTimeout(timer);
     }
-  }, [addCallMessage, answer, call, dispatch, socket]);
+  }, [dispatch, answer, socket, call, addCallMessage]);
 
   useEffect(() => {
     socket.on("endCallToClient", (data) => {
       tracks && tracks.forEach((track) => track.stop());
-
+      if (newCall) newCall.close();
       addCallMessage(data, data.times);
-
       dispatch({ type: GLOBALTYPES.CALL, payload: null });
     });
-
     return () => socket.off("endCallToClient");
-  }, [addCallMessage, call, dispatch, socket, tracks]);
+  }, [dispatch, answer, socket, call, tracks, addCallMessage, newCall]);
 
-  // stream media
+  // stream call
   const openStream = (video) => {
     const config = { audio: true, video };
     return navigator.mediaDevices.getUserMedia(config);
   };
-
   const playStream = (tag, stream) => {
     let video = tag;
     video.srcObject = stream;
@@ -110,23 +105,22 @@ const CallModal = () => {
       console.error("Error playing video stream:", error);
     });
   };
-
-  // answer call
+  // Answer call
   const handleAnswer = () => {
     openStream(call.video).then((stream) => {
       playStream(youVideo.current, stream);
       const track = stream.getTracks();
       setTracks(track);
 
-      var newCall = peer.call(call.peerId, stream);
+      const newCall = peer.call(call.peerId, stream);
       newCall.on("stream", function (remoteStream) {
         playStream(otherVideo.current, remoteStream);
       });
+
       setAnswer(true);
       setNewCall(newCall);
     });
   };
-
   useEffect(() => {
     peer.on("call", (newCall) => {
       openStream(call.video).then((stream) => {
@@ -136,7 +130,7 @@ const CallModal = () => {
         const track = stream.getTracks();
         setTracks(track);
         newCall.answer(stream);
-        newCall.on("stream", function (remoteStream) {
+        newCall.on("stream", (remoteStream) => {
           if (otherVideo.current) {
             playStream(otherVideo.current, remoteStream);
           }
@@ -145,36 +139,35 @@ const CallModal = () => {
         setNewCall(newCall);
       });
     });
-
     return () => peer.removeListener("call");
-  }, [call.video, peer]);
+  }, [peer, call.video]);
 
-  // caller Disconnect
   useEffect(() => {
     socket.on("callerDisconnect", () => {
       tracks && tracks.forEach((track) => track.stop());
-
+      if (newCall) newCall.close();
       let times = answer ? total : 0;
+      socket.emit("endCall", call);
       addCallMessage(call, times, true);
-
       dispatch({ type: GLOBALTYPES.CALL, payload: null });
-      alert("err: user disconnect");
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: `The ${call.username}  disconnect!` },
+      });
     });
     return () => socket.off("callerDisconnect");
-  }, [addCallMessage, answer, call, dispatch, socket, total, tracks]);
+  }, [dispatch, socket, call, tracks, addCallMessage, answer, total, newCall]);
 
-  // play - pause audio
+  /// Play - Pause Audio
   const playAudio = (newAudio) => {
     newAudio.play().catch((error) => {
-      console.log("Error playing audio:", error);
+      console.error("Audio play failed:", error);
     });
   };
-
   const pauseAudio = (newAudio) => {
     newAudio.pause();
-    newAudio.currentTime = 0;
+    newAudio.currentT = 0;
   };
-
   useEffect(() => {
     let newAudio = new Audio(RingRing);
     if (answer) {
@@ -182,6 +175,7 @@ const CallModal = () => {
     } else {
       playAudio(newAudio);
     }
+    return () => pauseAudio(newAudio);
   }, [answer]);
 
   return (
@@ -199,7 +193,7 @@ const CallModal = () => {
 
           {answer ? (
             <div>
-              <span>{hours.toString().length < 2 ? "0" + hours : hours}</span>
+              <span>{hour.toString().length < 2 ? "0" + hour : hour}</span>
               <span>:</span>
               <span>{mins.toString().length < 2 ? "0" + mins : mins}</span>
               <span>:</span>
@@ -262,7 +256,7 @@ const CallModal = () => {
         <video ref={otherVideo} className="other_video" />
 
         <div className="time_video">
-          <small>{hours.toString().length < 2 ? "0" + hours : hours}</small>
+          <small>{hour.toString().length < 2 ? "0" + hour : hour}</small>
           <small>:</small>
           <small>{mins.toString().length < 2 ? "0" + mins : mins}</small>
           <small>:</small>

@@ -27,7 +27,6 @@ const SearchUser = ({ setIsModalSearch }) => {
     setIsModalSearch(false);
     return navigate(`/message/${user._id}`);
   };
-  console.log({ online });
 
   useEffect(() => {
     const handleSearchUser = async () => {

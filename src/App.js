@@ -69,11 +69,12 @@ const App = () => {
 
   useEffect(() => {
     const newPeer = new Peer(undefined, {
-      host:
-        process.env.NODE_ENV === "production"
-          ? process.env.REACT_APP_API_URL
-          : process.env.REACT_APP_DEV_API_URL,
-      port: process.env.PORT_PEER,
+      // path:
+      //   process.env.NODE_ENV === "production"
+      //     ? process.env.REACT_APP_API_URL
+      //     : process.env.REACT_APP_DEV_API_URL,
+      path: "/",
+      secure: true,
     });
     dispatch({ type: GLOBALTYPES.PEER, payload: newPeer });
   }, [dispatch]);

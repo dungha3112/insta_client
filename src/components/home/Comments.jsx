@@ -21,14 +21,6 @@ const Comments = ({ post }) => {
     setReplyComments(newRep);
   }, [post.comments]);
 
-  // useEffect(() => {
-  //   if (post._id) {
-  //     getDataAPI(`comment/post/${post._id}`, auth.access_token).then((res) =>
-  //       console.log(res.data)
-  //     );
-  //   }
-  // }, [auth.access_token, post._id]);
-
   return (
     <div>
       {showComments.map((comment) => (
