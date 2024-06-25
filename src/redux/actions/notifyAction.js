@@ -18,7 +18,12 @@ export const createNotify =
         ...res.data.newNotify,
         user: { username: auth.user.username, avatar: auth.user.avatar },
       });
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const removeNotify =
@@ -32,14 +37,24 @@ export const removeNotify =
 
       // const res = await getDataAPI(`notifies`, auth.access_token);
       // dispatch({ type: NOTIFY_TYPES.GET_NOTIFIES, payload: res.data.notifies });
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const getNotifies = (access_token) => async (dispatch) => {
   try {
     const res = await getDataAPI(`notifies`, access_token);
     dispatch({ type: NOTIFY_TYPES.GET_NOTIFIES, payload: res.data.notifies });
-  } catch (error) {}
+  } catch (error) {
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: { error: error.response.data.msg },
+    });
+  }
 };
 
 export const readNotify =
@@ -57,7 +72,12 @@ export const readNotify =
         type: NOTIFY_TYPES.UPDATE_NOTIFIES,
         payload: { ...res.data.readNotify, user: auth.user },
       });
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const deleteANotify =
@@ -66,7 +86,12 @@ export const deleteANotify =
     try {
       await patchDataAPI(`notify/delete/${msg._id}`, {}, auth.access_token);
       dispatch({ type: NOTIFY_TYPES.DELETE_NOTIFY, payload: msg });
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const deleteAllNotifies =
@@ -76,5 +101,10 @@ export const deleteAllNotifies =
       await deleteDataAPI(`notifies`, token);
       setIsDeleteAll(false);
       dispatch({ type: NOTIFY_TYPES.DELETE_NOTIFIES, payload: [] });
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };

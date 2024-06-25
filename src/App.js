@@ -16,6 +16,7 @@ import SocketClient from "./utils/SocketClient";
 import { baseURL } from "./utils/fetchData";
 import InstagramLoading from "./components/loading/InstagramLoading";
 import CallModal from "./components/message/CallModal";
+import Toast from "./components/toast/Toast";
 
 const PageRender = React.lazy(() => import("./customRouters/PageRender"));
 
@@ -27,7 +28,9 @@ const ForgotPassword = React.lazy(() => import("./pages/forgot-password"));
 const App = () => {
   const { access_token } = useSelector((state) => state.auth);
   const { call } = useSelector((state) => state);
-  const { loadingHomeScreen } = useSelector((state) => state.alert);
+  const { loadingHomeScreen, error, loading } = useSelector(
+    (state) => state.alert
+  );
   const [firstLogin, setFirstLogin] = useState(
     localStorage.getItem("firstLogin")
   );
@@ -69,10 +72,6 @@ const App = () => {
 
   useEffect(() => {
     const newPeer = new Peer(undefined, {
-      // path:
-      //   process.env.NODE_ENV === "production"
-      //     ? process.env.REACT_APP_API_URL
-      //     : process.env.REACT_APP_DEV_API_URL,
       path: "/",
       secure: true,
     });
@@ -84,10 +83,12 @@ const App = () => {
   return (
     <div className="flex">
       <ToastContainer />
+
       <BrowserRouter>
         {access_token && <Sidebar />}
         {access_token && <SocketClient />}
         {call && <CallModal />}
+        {(error || loading) && <Toast />}
 
         <Suspense fallback={<InstagramLoading />}>
           <div

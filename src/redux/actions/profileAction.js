@@ -29,7 +29,12 @@ export const getProfileUsers =
         type: PROFILE_TYPES.GET_POSTS,
         payload: { ...posts.data, _id: id, page: 2 },
       });
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const updateProfile =
@@ -55,7 +60,12 @@ export const updateProfile =
           },
         },
       });
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const updatePassword = (data, auth) => async (dispatch) => {
@@ -68,7 +78,12 @@ export const updatePassword = (data, auth) => async (dispatch) => {
       type: GLOBALTYPES.AUTH,
       payload: {},
     });
-  } catch (error) {}
+  } catch (error) {
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: { error: error.response.data.msg },
+    });
+  }
 };
 
 export const follow =
@@ -113,7 +128,12 @@ export const follow =
         image: auth.user.avatar,
       };
       dispatch(createNotify({ msg, auth, socket }));
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const unfollow =
@@ -167,5 +187,10 @@ export const unfollow =
         url: `/profile/${auth.user._id}`,
       };
       dispatch(removeNotify({ msg, auth, socket }));
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };

@@ -45,7 +45,12 @@ export const createPost =
         image: media[0].url,
       };
       dispatch(createNotify({ msg, auth, socket }));
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const updatePost =
@@ -73,7 +78,12 @@ export const updatePost =
         type: POST_TYPE.UPDATE_POST,
         payload: { ...res.data.post, user: auth.user },
       });
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const getPosts = (access_token) => async (dispatch) => {
@@ -84,7 +94,12 @@ export const getPosts = (access_token) => async (dispatch) => {
 
     dispatch({ type: POST_TYPE.GET_POSTS, payload: { ...res.data, page: 2 } });
     dispatch({ type: POST_TYPE.LOADING_POSTS, payload: false });
-  } catch (error) {}
+  } catch (error) {
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: { error: error.response.data.msg },
+    });
+  }
 };
 
 export const getPost =
@@ -95,7 +110,12 @@ export const getPost =
         const res = await getDataAPI(`post/${id}`, auth.access_token);
 
         dispatch({ type: POST_TYPE.GET_POST, payload: res.data.post });
-      } catch (error) {}
+      } catch (error) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: { error: error.response.data.msg },
+        });
+      }
     }
   };
 
@@ -120,7 +140,12 @@ export const likePost =
         image: post.images[0].url,
       };
       dispatch(createNotify({ msg, auth, socket }));
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const unLikePost =
@@ -145,7 +170,12 @@ export const unLikePost =
         url: `/post/${post._id}`,
       };
       dispatch(removeNotify({ msg, auth, socket }));
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const getUserLike =
@@ -157,7 +187,12 @@ export const getUserLike =
         type: GLOBALTYPES.MODAL,
         payload: { likes: true, userLikes: res.data },
       });
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const deletePost =
@@ -185,7 +220,12 @@ export const deletePost =
         url: `/post/${post._id}`,
       };
       dispatch(removeNotify({ msg, auth, socket }));
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const savePost =
@@ -195,7 +235,12 @@ export const savePost =
     dispatch({ type: GLOBALTYPES.AUTH, payload: { ...auth, user: newUser } });
     try {
       await patchDataAPI(`post/${post._id}/save`, {}, auth.access_token);
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const unSavePost =
@@ -208,5 +253,10 @@ export const unSavePost =
     dispatch({ type: GLOBALTYPES.AUTH, payload: { ...auth, user: newUser } });
     try {
       await patchDataAPI(`post/${post._id}/unsave`, {}, auth.access_token);
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };

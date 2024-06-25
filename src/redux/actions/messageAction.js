@@ -1,6 +1,6 @@
 import { deleteDataAPI, getDataAPI, postDataAPI } from "../../utils/fetchData";
 import { MESSAGE_TYPES } from "../reducers/messageReducer";
-import { DeleteData } from "./globalTypes";
+import { DeleteData, GLOBALTYPES } from "./globalTypes";
 
 export const addMessage =
   ({ msg, auth, socket }) =>
@@ -16,7 +16,12 @@ export const addMessage =
         type: MESSAGE_TYPES.ADD_MESSAGE,
         payload: { ...msg, _id: res.data.newMessage._id },
       });
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const getConversations =
@@ -45,7 +50,12 @@ export const getConversations =
         type: MESSAGE_TYPES.GET_CONVERSATIONS,
         payload: { newArr, result: res.data.result },
       });
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const getMessages =
@@ -62,7 +72,12 @@ export const getMessages =
         type: MESSAGE_TYPES.GET_MESSAGES,
         payload: { ...newData, _id: id, page },
       });
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const loadMoreMessage =
@@ -79,7 +94,12 @@ export const loadMoreMessage =
         type: MESSAGE_TYPES.UPDATE_MESSAGES,
         payload: { ...newData, _id: id, page },
       });
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const deleteMessage =
@@ -98,7 +118,12 @@ export const deleteMessage =
 
     try {
       await deleteDataAPI(`message/${msg._id}`, auth.access_token);
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const deleteConversation =
@@ -107,5 +132,10 @@ export const deleteConversation =
     dispatch({ type: MESSAGE_TYPES.DELETE_CONVERSATION, payload: id });
     try {
       await deleteDataAPI(`conversation/${id}`, auth.access_token);
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };

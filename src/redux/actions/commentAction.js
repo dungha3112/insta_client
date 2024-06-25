@@ -40,7 +40,12 @@ export const createComment =
         image: post.images[0].url,
       };
       dispatch(createNotify({ msg, auth, socket }));
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const updateComment =
@@ -58,7 +63,12 @@ export const updateComment =
         { content },
         auth.access_token
       );
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const likeComment =
@@ -84,7 +94,12 @@ export const likeComment =
         image: post.images[0].url,
       };
       dispatch(createNotify({ msg, auth, socket }));
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const unLikeComment =
@@ -114,7 +129,12 @@ export const unLikeComment =
         url: `/post/${post._id}`,
       };
       dispatch(removeNotify({ msg, auth, socket }));
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const getUserLikeComment =
@@ -129,7 +149,12 @@ export const getUserLikeComment =
         type: GLOBALTYPES.MODAL,
         payload: { likes: true, userLikes: res.data },
       });
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };
 
 export const deleteComment =
@@ -162,5 +187,10 @@ export const deleteComment =
 
         dispatch(removeNotify({ msg, auth, socket }));
       });
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };

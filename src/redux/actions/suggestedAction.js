@@ -1,5 +1,6 @@
 import { getDataAPI } from "../../utils/fetchData";
 import { SUGGES_TYPES } from "../reducers/suggestedReducer";
+import { GLOBALTYPES } from "./globalTypes";
 
 export const getSuggestions = (token) => async (dispatch) => {
   try {
@@ -9,5 +10,10 @@ export const getSuggestions = (token) => async (dispatch) => {
     dispatch({ type: SUGGES_TYPES.GET_USERS, payload: res.data });
 
     dispatch({ type: SUGGES_TYPES.LOADING, payload: false });
-  } catch (error) {}
+  } catch (error) {
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: { error: error.response.data.msg },
+    });
+  }
 };

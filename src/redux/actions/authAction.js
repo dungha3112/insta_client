@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 export const login = (data) => async (dispatch) => {
   try {
-    // dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: true } });
+    dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: true } });
     const res = await postDataAPI("auth/signin", data);
     dispatch({
       type: GLOBALTYPES.AUTH,
@@ -19,12 +19,19 @@ export const login = (data) => async (dispatch) => {
 
     localStorage.setItem("firstLogin", true);
     localStorage.setItem("openBellNotifies", "open");
-    // dispatch({ type: GLOBALTYPES.ALERT, payload: { success: res.data.msg } });
-  } catch (error) {}
+    dispatch({ type: GLOBALTYPES.ALERT, payload: {} });
+  } catch (error) {
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: { error: error.response.data.msg },
+    });
+  }
 };
 
 export const signUp = (data) => async (dispatch) => {
   try {
+    dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: true } });
+
     const res = await postDataAPI("auth/signup", data);
     dispatch({
       type: GLOBALTYPES.AUTH,
@@ -34,8 +41,14 @@ export const signUp = (data) => async (dispatch) => {
         user: res.data.user,
       },
     });
+    dispatch({ type: GLOBALTYPES.ALERT, payload: {} });
     localStorage.setItem("firstLogin", true);
-  } catch (error) {}
+  } catch (error) {
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: { error: error.response.data.msg },
+    });
+  }
 };
 
 export const refreshToken = () => async (dispatch) => {
@@ -51,11 +64,12 @@ export const refreshToken = () => async (dispatch) => {
       type: GLOBALTYPES.ALERT,
       payload: { loadingHomeScreen: false },
     });
-
-    // dispatch({ type: GLOBALTYPES.ALERT, payload: { success: res.data.msg } });
   } catch (error) {
-    console.log(error);
-    // localStorage.removeItem("firstLogin");
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: { error: error.response.data.msg },
+    });
+    localStorage.removeItem("firstLogin");
   }
 };
 
@@ -77,5 +91,10 @@ export const loggout =
         type: POST_TYPE.GET_POSTS,
         payload: { posts: [], result: 0 },
       });
-    } catch (error) {}
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
   };

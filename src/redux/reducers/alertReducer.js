@@ -1,8 +1,8 @@
 import { GLOBALTYPES } from "../actions/globalTypes";
 
-const initialState = { loadingHomeScreen: false };
+const initialState = { loadingHomeScreen: false, error: "", loading: false };
 
-const authReducer = (state = initialState, action) => {
+const alertReducer = (state = initialState, action) => {
   switch (action.type) {
     case GLOBALTYPES.ALERT:
       return action.payload;
@@ -11,4 +11,4 @@ const authReducer = (state = initialState, action) => {
   }
 };
 
-export default authReducer;
+export default alertReducer;
