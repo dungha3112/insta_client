@@ -1,22 +1,22 @@
 import React, { Suspense, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import LoadingScreen from "./components/loading/LoadingScreen";
 import Sidebar from "./components/sidebar/Sidebar";
 import { refreshToken } from "./redux/actions/authAction";
 import { getPosts } from "./redux/actions/postAction";
-import { ToastContainer } from "react-toastify";
 
-import io from "socket.io-client";
 import Peer from "peerjs";
+import io from "socket.io-client";
 
+import InstagramLoading from "./components/loading/InstagramLoading";
+import CallModal from "./components/message/CallModal";
+import Toast from "./components/toast/Toast";
 import { GLOBALTYPES } from "./redux/actions/globalTypes";
 import { getNotifies } from "./redux/actions/notifyAction";
 import SocketClient from "./utils/SocketClient";
 import { baseURL } from "./utils/fetchData";
-import InstagramLoading from "./components/loading/InstagramLoading";
-import CallModal from "./components/message/CallModal";
-import Toast from "./components/toast/Toast";
 
 const PageRender = React.lazy(() => import("./customRouters/PageRender"));
 
@@ -107,12 +107,7 @@ const App = () => {
                 path="/signup"
                 element={access_token ? <Navigate to="/" /> : <SignUp />}
               />
-              <Route
-                path="/forgot-password"
-                element={
-                  access_token ? <Navigate to="/" /> : <ForgotPassword />
-                }
-              />
+
               <Route path="/:page" element={<PageRender />} />
               <Route path="/:page/:id" element={<PageRender />} />
             </Routes>
