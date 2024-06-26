@@ -23,7 +23,6 @@ const PageRender = React.lazy(() => import("./customRouters/PageRender"));
 const HomePage = React.lazy(() => import("./pages/home"));
 const SignIn = React.lazy(() => import("./pages/signin"));
 const SignUp = React.lazy(() => import("./pages/signup"));
-const ForgotPassword = React.lazy(() => import("./pages/forgot-password"));
 
 const App = () => {
   const { access_token } = useSelector((state) => state.auth);
