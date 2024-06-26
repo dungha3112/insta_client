@@ -10,6 +10,7 @@ const EditProfile = () => {
   const dispatch = useDispatch();
 
   const [avatar, setAvatar] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const [fullname, setFullname] = useState(auth.user.fullname);
   const [username, setUsername] = useState(auth.user.username);
@@ -37,7 +38,7 @@ const EditProfile = () => {
     }
   }, [auth.user]);
 
-  const handleUpdateProfile = (e) => {
+  const handleUpdateProfile = async (e) => {
     e.preventDefault();
     const data = {
       fullname,
@@ -46,8 +47,10 @@ const EditProfile = () => {
       gender,
       username,
     };
+    setLoading(true);
 
-    dispatch(updateProfile({ data, avatar, auth }));
+    await dispatch(updateProfile({ data, avatar, auth }));
+    setLoading(false);
   };
 
   return (
@@ -140,8 +143,8 @@ const EditProfile = () => {
 
             <TextButton
               type="submit"
-              disabled={auth.loading}
-              title={auth.loading ? "Loading ..." : "Save"}
+              disabled={loading}
+              title={loading ? "Loading ..." : "Save"}
             />
           </div>
         </div>

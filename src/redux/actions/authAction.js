@@ -1,5 +1,7 @@
 import { getDataAPI, postDataAPI } from "../../utils/fetchData";
 import { EXPLORE_TYPES } from "../reducers/exploreReducer";
+import { NOTIFY_TYPES } from "../reducers/notifyReducer";
+import { SUGGES_TYPES } from "../reducers/suggestedReducer";
 import { GLOBALTYPES } from "./globalTypes";
 import { POST_TYPE } from "./postAction";
 import "react-toastify/dist/ReactToastify.css";
@@ -82,15 +84,12 @@ export const loggout =
       await postDataAPI("auth/logout", {}, auth.access_token);
       localStorage.removeItem("firstLogin");
       dispatch({ type: GLOBALTYPES.AUTH, payload: {} });
-      dispatch({
-        type: EXPLORE_TYPES.GET_POSTS,
-        payload: { posts: [], result: 0 },
-      });
+      dispatch({ type: EXPLORE_TYPES.GET_POSTS, payload: {} });
 
-      dispatch({
-        type: POST_TYPE.GET_POSTS,
-        payload: { posts: [], result: 0 },
-      });
+      dispatch({ type: POST_TYPE.GET_POSTS, payload: {} });
+      dispatch({ type: NOTIFY_TYPES.GET_NOTIFIES, payload: [] });
+
+      dispatch({ type: SUGGES_TYPES.GET_USERS, payload: {} });
     } catch (error) {
       dispatch({
         type: GLOBALTYPES.ALERT,

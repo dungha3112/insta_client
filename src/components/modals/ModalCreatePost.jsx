@@ -18,6 +18,7 @@ const ModalCreatePost = () => {
   const videoRef = useRef();
   const refCanvas = useRef();
   const [tracks, setTracks] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [openIcons, setOpenIcons] = useState(false);
 
@@ -89,9 +90,13 @@ const ModalCreatePost = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (modal.onEdit) {
+      setLoading(true);
       await dispatch(updatePost({ content, images, auth, post: modal.post }));
+      setLoading(false);
     } else {
+      setLoading(true);
       await dispatch(createPost({ content, images, auth, socket }));
+      setLoading(false);
     }
     setContent("");
     setImages([]);
@@ -186,7 +191,11 @@ const ModalCreatePost = () => {
             changeIcons={changeIcons}
             classname="left-0 bottom-[100%]"
           />
-          <TextButton type="submit" title={modal.onEdit ? "Edit" : "Post"} />
+          <TextButton
+            type="submit"
+            title={loading ? "Loading..." : modal.onEdit ? "Edit" : "Post"}
+            dispatch={loading}
+          />
         </form>
       </div>
     </div>
