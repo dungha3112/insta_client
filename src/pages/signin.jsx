@@ -49,12 +49,6 @@ const SignIn = () => {
           placeholder="Enter password ..."
         />
         <TextButton type="submit" title="Sign In" />
-
-        <p className="text-center pt-6">
-          <Link to="/forgot-password" className="text-sm text-center">
-            Forgot password?
-          </Link>
-        </p>
       </form>
 
       <div className="border px-8 py-6">
