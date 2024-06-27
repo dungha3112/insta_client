@@ -1,18 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import { GLOBALTYPES } from "../../redux/actions/globalTypes";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const Toast = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const { error, loading } = useSelector((state) => state.alert);
+  const { error } = useSelector((state) => state.alert);
 
   const onClickYes = () => {
     dispatch({ type: GLOBALTYPES.ALERT, payload: {} });
-    if (pathname === "/signup") {
+    if (pathname === "/signup" || pathname === "/signup/") {
       return navigate("/signup");
+    } else if (pathname === "/setting" || pathname === "/setting/") {
+      return navigate("/setting");
     } else {
       return navigate("/");
     }
@@ -34,16 +36,6 @@ const Toast = () => {
             >
               OK
             </div>
-          </div>
-        </div>
-      )}
-
-      {loading && (
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="relative w-24 h-24">
-            <div className="absolute top-0 left-0 w-full h-full bg-blue-500 rounded-full opacity-75 animate-ping"></div>
-            <div className="absolute top-0 left-0 w-full h-full bg-blue-500 rounded-full opacity-75 animate-ping animation-delay-200"></div>
-            <div className="absolute top-0 left-0 w-full h-full bg-blue-500 rounded-full opacity-75 animate-ping animation-delay-400"></div>
           </div>
         </div>
       )}

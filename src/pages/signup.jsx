@@ -11,13 +11,16 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [fullname, setFullname] = useState("");
   const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
     const data = { email, password, fullname, username };
-    dispatch(signUp(data));
+    setLoading(true);
+    await dispatch(signUp(data));
+    setLoading(false);
   };
   return (
     <div className="w-full p-3 max-w-[350px] fixed flex flex-col gap-3 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -59,7 +62,11 @@ const SignUp = () => {
           placeholder="Password ..."
         />
 
-        <TextButton type="submit" title="Sign up" />
+        <TextButton
+          type="submit"
+          title={loading ? "Loading ..." : "Sign up"}
+          dispatch={loading}
+        />
       </form>
 
       <div className="border px-8 py-6">

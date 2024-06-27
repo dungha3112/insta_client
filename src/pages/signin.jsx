@@ -12,11 +12,14 @@ const SignIn = () => {
   const dispatch = useDispatch();
   const { access_token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleSigin = async (e) => {
     e.preventDefault();
     const data = { email, password };
-    dispatch(login(data));
+    setLoading(true);
+    await dispatch(login(data));
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -48,7 +51,11 @@ const SignIn = () => {
           required
           placeholder="Enter password ..."
         />
-        <TextButton type="submit" title="Sign In" />
+        <TextButton
+          type="submit"
+          title={loading ? "Loading ..." : "Sign In"}
+          dispatch={loading}
+        />
       </form>
 
       <div className="border px-8 py-6">

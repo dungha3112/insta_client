@@ -8,7 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 export const login = (data) => async (dispatch) => {
   try {
-    dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: true } });
     const res = await postDataAPI("auth/signin", data);
     dispatch({
       type: GLOBALTYPES.AUTH,
@@ -32,8 +31,6 @@ export const login = (data) => async (dispatch) => {
 
 export const signUp = (data) => async (dispatch) => {
   try {
-    dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: true } });
-
     const res = await postDataAPI("auth/signup", data);
     dispatch({
       type: GLOBALTYPES.AUTH,

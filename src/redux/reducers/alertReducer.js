@@ -1,6 +1,6 @@
 import { GLOBALTYPES } from "../actions/globalTypes";
 
-const initialState = { loadingHomeScreen: false, error: "", loading: false };
+const initialState = { loadingHomeScreen: false, error: "" };
 
 const alertReducer = (state = initialState, action) => {
   switch (action.type) {
